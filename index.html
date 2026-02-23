@@ -174,13 +174,10 @@ async function submitTest(){
     };
 
     try{
-        await fetch("https://script.google.com/macros/s/AKfycbyvt-0sCpum4AUWlVdE0g5WHUadDlJTJ4Yiu0Ng8WJHSzIGLUcyuCyFOttqTPq7L4QF/exec",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload)
-        });
+await fetch("https://script.google.com/macros/s/AKfycbyvt-0sCpum4AUWlVdE0g5WHUadDlJTJ4Yiu0Ng8WJHSzIGLUcyuCyFOttqTPq7L4QF/exec",{
+    method:"POST",
+    body: new URLSearchParams(payload)
+});
 
         alert("送信しました！");
     }catch(error){
