@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>学力テスト</title>
+
+<style>
+body{
+    font-family:sans-serif;
+    margin:20px;
+    line-height:1.6;
+    user-select:none;
+}
+h1{text-align:center;}
+.section{margin-top:30px;}
+.question{margin:10px 0;}
+textarea{width:100%;height:60px;}
+input[type="text"]{width:100%;}
+.timer{
+    position:fixed;
+    top:10px;
+    right:20px;
+    font-size:24px;
+    font-weight:bold;
+}
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    font-size:16px;
+}
+</style>
+</head>
+
+<body oncontextmenu="return false">
+<h1>学力テスト（制限時間30分）</h1>
+<div class="timer" id="timer">30:00</div>
+
+名前：
+<input type="text" id="name">
+
+<!-- 国語 -->
+<div class="section">
+<h2>【国語】20点</h2>
+
+<div class="question">① 「挑戦」の意味を書け。</div>
+<textarea id="kokugo1"></textarea>
+
+<div class="question">② 次の漢字を読みなさい「継続」</div>
+<textarea id="kokugo2"></textarea>
+
+<div class="question">③ ことわざ「七転び八起き」の意味を書け。</div>
+<textarea id="kokugo3"></textarea>
+
+<div class="question">④ 比喩とは何か説明せよ。</div>
+<textarea id="kokugo4"></textarea>
+
+<div class="question">⑤ 最近読んだ本とその感想を書け。</div>
+<textarea id="kokugo5"></textarea>
+</div>
+
+<!-- 数学 -->
+<div class="section">
+<h2>【数学】20点</h2>
+
+<div class="question">① 36÷6 を計算せよ。</div>
+<textarea id="sugaku1"></textarea>
+
+<div class="question">② 3x=21 のとき x は？</div>
+<textarea id="sugaku2"></textarea>
+
+<div class="question">③ 1辺が5cmの正方形の面積は？</div>
+<textarea id="sugaku3"></textarea>
+
+<div class="question">④ 円周率は約いくつか。</div>
+<textarea id="sugaku4"></textarea>
+
+<div class="question">⑤ 15%の300はいくつか。</div>
+<textarea id="sugaku5"></textarea>
+</div>
+
+<!-- 英語 -->
+<div class="section">
+<h2>【英語】20点</h2>
+
+<div class="question">① I like music. を日本語に訳せ。</div>
+<textarea id="eigo1"></textarea>
+
+<div class="question">② 「彼女は先生です」を英語にせよ。</div>
+<textarea id="eigo2"></textarea>
+
+<div class="question">③ take の過去形は？</div>
+<textarea id="eigo3"></textarea>
+
+<div class="question">④ child の複数形は？</div>
+<textarea id="eigo4"></textarea>
+
+<div class="question">⑤ 「こんにちは」を英語で書け。</div>
+<textarea id="eigo5"></textarea>
+</div>
+
+<!-- 理科 -->
+<div class="section">
+<h2>【理科】20点</h2>
+
+<div class="question">① 光合成に必要なものを3つ書け。</div>
+<textarea id="rika1"></textarea>
+
+<div class="question">② 水の化学式は何か。</div>
+<textarea id="rika2"></textarea>
+
+<div class="question">③ 電圧の単位は何か。</div>
+<textarea id="rika3"></textarea>
+
+<div class="question">④ 地球が太陽の周りを回ることを何というか。</div>
+<textarea id="rika4"></textarea>
+
+<div class="question">⑤ 月が満ち欠けする理由を書け。</div>
+<textarea id="rika5"></textarea>
+</div>
+
+<!-- 社会 -->
+<div class="section">
+<h2>【社会】20点</h2>
+
+<div class="question">① 日本の首都はどこか。</div>
+<textarea id="shakai1"></textarea>
+
+<div class="question">② 三権分立の3つを答えよ。</div>
+<textarea id="shakai2"></textarea>
+
+<div class="question">③ 鎌倉幕府が成立した年。</div>
+<textarea id="shakai3"></textarea>
+
+<div class="question">④ 日本国憲法が施行された年。</div>
+<textarea id="shakai4"></textarea>
+
+<div class="question">⑤ 太平洋ベルトとは何か。</div>
+<textarea id="shakai5"></textarea>
+</div>
+
+<button onclick="submitTest()">提出</button>
+
+<script>
+let startTime = new Date().getTime();
+let timeLeft = 1800;
+
+let timerInterval = setInterval(function(){
+    timeLeft--;
+    let minutes = Math.floor(timeLeft/60);
+    let seconds = timeLeft%60;
+    document.getElementById("timer").innerText =
+        String(minutes).padStart(2,"0")+":"+
+        String(seconds).padStart(2,"0");
+
+    if(timeLeft<=0){
+        clearInterval(timerInterval);
+        submitTest();
+    }
+},1000);
+
+async function submitTest(){
+
+    const endTime = new Date().getTime();
+    const elapsed = Math.floor((endTime - startTime)/1000);
+
+    const payload = {
+        name: document.getElementById("name").value,
+        kokugo: kokugo1.value + "|" + kokugo2.value + "|" + kokugo3.value + "|" + kokugo4.value + "|" + kokugo5.value,
+        sugaku: sugaku1.value + "|" + sugaku2.value + "|" + sugaku3.value + "|" + sugaku4.value + "|" + sugaku5.value,
+        eigo: eigo1.value + "|" + eigo2.value + "|" + eigo3.value + "|" + eigo4.value + "|" + eigo5.value,
+        rika: rika1.value + "|" + rika2.value + "|" + rika3.value + "|" + rika4.value + "|" + rika5.value,
+        shakai: shakai1.value + "|" + shakai2.value + "|" + shakai3.value + "|" + shakai4.value + "|" + shakai5.value,
+        time: elapsed + "秒"
+    };
+
+    try{
+        await fetch("https://script.google.com/macros/s/AKfycbyvt-0sCpum4AUWlVdE0g5WHUadDlJTJ4Yiu0Ng8WJHSzIGLUcyuCyFOttqTPq7L4QF/exec",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(payload)
+        });
+
+        alert("送信しました！");
+    }catch(error){
+        alert("送信エラー："+error);
+    }
+}
+
+document.onkeydown = function(e){
+    if(e.keyCode==123){return false;}
+};
+</script>
+
+</body>
+</html>
