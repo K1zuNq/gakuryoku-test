@@ -71,7 +71,6 @@ button{
 
 <div class="question">⑩ ことわざ「七転び八起き」が表す意味を一言で答えよ。</div>
 <textarea id="kokugo10"></textarea>
-
 </div>
 
 <!-- 数学 -->
@@ -107,7 +106,6 @@ button{
 
 <div class="question">⑩ 連続する2つの整数の和が41である。この2つの整数を答えよ。</div>
 <textarea id="sugaku10"></textarea>
-
 </div>
 
 <!-- 英語 -->
@@ -143,7 +141,6 @@ button{
 
 <div class="question">⑩ 次の文の誤りを直せ。He go to school every day.</div>
 <textarea id="eigo10"></textarea>
-
 </div>
 
 <!-- 理科 -->
@@ -179,7 +176,6 @@ button{
 
 <div class="question">⑩ 結晶が大きい火山岩を何というか。</div>
 <textarea id="rika10"></textarea>
-
 </div>
 
 <!-- 社会 -->
@@ -215,5 +211,58 @@ button{
 
 <div class="question">⑩ 第二次世界大戦が終結したのは何年か。</div>
 <textarea id="shakai10"></textarea>
-
 </div>
+
+<button onclick="submitTest()">提出</button>
+
+<script>
+let startTime = new Date().getTime();
+let timeLeft = 1800;
+
+let timerInterval = setInterval(function(){
+    timeLeft--;
+    let minutes = Math.floor(timeLeft/60);
+    let seconds = timeLeft%60;
+    document.getElementById("timer").innerText =
+        String(minutes).padStart(2,"0")+":"+
+        String(seconds).padStart(2,"0");
+
+    if(timeLeft<=0){
+        clearInterval(timerInterval);
+        submitTest();
+    }
+},1000);
+
+async function submitTest(){
+
+    const endTime = new Date().getTime();
+    const elapsed = Math.floor((endTime - startTime)/1000);
+
+    const payload = {
+        name: document.getElementById("name").value,
+        kokugo: kokugo1.value + "|" + kokugo2.value + "|" + kokugo3.value + "|" + kokugo4.value + "|" + kokugo5.value + "|" + kokugo6.value + "|" + kokugo7.value + "|" + kokugo8.value + "|" + kokugo9.value + "|" + kokugo10.value,
+        sugaku: sugaku1.value + "|" + sugaku2.value + "|" + sugaku3.value + "|" + sugaku4.value + "|" + sugaku5.value + "|" + sugaku6.value + "|" + sugaku7.value + "|" + sugaku8.value + "|" + sugaku9.value + "|" + sugaku10.value,
+        eigo: eigo1.value + "|" + eigo2.value + "|" + eigo3.value + "|" + eigo4.value + "|" + eigo5.value + "|" + eigo6.value + "|" + eigo7.value + "|" + eigo8.value + "|" + eigo9.value + "|" + eigo10.value,
+        rika: rika1.value + "|" + rika2.value + "|" + rika3.value + "|" + rika4.value + "|" + rika5.value + "|" + rika6.value + "|" + rika7.value + "|" + rika8.value + "|" + rika9.value + "|" + rika10.value,
+        shakai: shakai1.value + "|" + shakai2.value + "|" + shakai3.value + "|" + shakai4.value + "|" + shakai5.value + "|" + shakai6.value + "|" + shakai7.value + "|" + shakai8.value + "|" + shakai9.value + "|" + shakai10.value,
+        time: elapsed + "秒"
+    };
+
+    try{
+await fetch("https://script.google.com/macros/s/AKfycbyvt-0sCpum4AUWlVdE0g5WHUadDlJTJ4Yiu0Ng8WJHSzIGLUcyuCyFOttqTPq7L4QF/exec",{
+    method:"POST",
+    body: new URLSearchParams(payload)
+});
+        alert("送信しました！");
+    }catch(error){
+        alert("送信エラー："+error);
+    }
+}
+
+document.onkeydown = function(e){
+    if(e.keyCode==123){return false;}
+};
+</script>
+
+</body>
+</html>
